@@ -1,0 +1,116 @@
+Experiment 9: Jenkins Declarative PipelineAim:
+To understand the Jenkins Declarative Pipeline by creating a Jenkinsfile and defining structured build and test stages for automated execution.
+Theory:Declarative Pipeline: A more recent and simplified way to define Jenkins pipelines using a structured "Pipeline-as-Code" approach.
+Jenkinsfile: A text file that contains the definition of a Jenkins Pipeline and is checked into source control.
+Stages: These represent distinct phases of the build process 
+(e.g., Build, Test, Deploy), allowing for clear visualization of the software delivery process.
+Agent: Defines where the entire Pipeline, or a specific stage, will execute in the Jenkins environment
+.Steps and Configuration1. Create the JenkinsfileIn your local project directory (where your Calculator.java is located), create a file named Jenkinsfile (no extension) and paste the following code:Groovypipeline {
+    agent any
+
+    stages {
+        stage('Compile') {
+            steps {
+                echo 'Compiling the Calculator application...'
+                // Command to compile the Java code
+                bat 'javac Calculator.java' 
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running the Calculator application...'
+                // Command to run the Java application and check output
+                bat 'java Calculator'
+            }
+        }
+        stage('Archive') {
+            steps {
+                echo 'Archiving build artifacts...'
+                // In a real setup, we would archive the .class or .jar files
+                archiveArtifacts artifacts: '*.class', fingerprint: true
+            }
+        }
+    }
+}
+2. Push to GitHub
+Commit and push the Jenkinsfile to your GitHub repository along with your Calculator.java.
+3. Create a Pipeline Job in JenkinsClick on New Item on the Jenkins dashboard.Enter a name (e.g., Calculator_Pipeline).Select Pipeline and click OK.
+4. Configure Pipeline Script from SCMScroll down to the Pipeline section.Change Definition to Pipeline script from SCM.
+Select Git as the SCM.Enter your Repository URL and Credentials.Ensure the Script Path is set to Jenkinsfile.
+5. Build and VerifyClick Save and then Build Now.Once the build starts, you can view the Stage View on the main job page,
+which shows each stage (Compile, Test, Archive) passing or failing.Click on a specific stage to view the Console Output for that segment of the build.
+
+
+
+
+
+
+
+10
+
+Aim:
+To understand Jenkins pipeline visualization and log analysis by viewing stage progress, analyzing execution logs, and practicing debugging techniques to build CI troubleshooting skills.
+
+Theory:
+
+
+Pipeline Visualization: Jenkins provides a "Stage View" that graphically represents the status and duration of each stage in a Jenkinsfile, making it easy to identify exactly where a build failed.
+
+Console Output: A comprehensive log of every command executed during the build. It is the primary tool for debugging errors such as syntax mistakes, failed tests, or environment issues.
++2
+
+
+Debugging: The process of identifying the root cause of a build failure by checking logs and re-running specific stages.
++1
+
+Steps and Configuration
+1. Navigate to the Pipeline Job
+
+Open the Jenkins dashboard and select your Calculator_Pipeline created in the previous experiment.
++1
+
+The main page will display the Stage View, showing a row for each build and columns for "Compile," "Test," and "Archive".
+
+2. Analyze the Pipeline Visualization
+
+
+Green Blocks: Indicate the stage completed successfully.
++1
+
+
+Red Blocks: Indicate the stage where the build failed.
+
+
+Hover Effect: Hover over a specific block to see the execution time and a link to the logs for just that stage.
++2
+
+3. Access Full Execution Logs
+
+Click on the build number (e.g., #5) in the Build History.
+
+Select Console Output from the left-hand menu to view the full text log of the entire pipeline execution.
++2
+
+4. Debugging a Failure (Simulated Task)
+
+
+Identify the Error: Look for keywords like ERROR, FATAL, or specific Java compiler errors (e.g., expected ';') in the logs.
++1
+
+
+Example Debugging: If the "Test" stage fails for your Calculator, check the console output to see if the java Calculator command threw a ClassNotFoundException or an AssertionError.
++1
+
+5. Correct and Re-run
+
+Based on the logs, modify your Calculator.java or Jenkinsfile in GitHub to fix the issue.
+
+Commit the changes to trigger a new build via the webhook or SCM polling configured earlier.
++1
+
+Verify that the visualization now shows all stages as green.
++2
+
+Outcome
+Troubleshooting skills were enhanced by successfully navigating pipeline visualizations and analyzing console logs. This process demonstrated how to identify, debug, and resolve failures within a Continuous Integration (CI) environment.
++1
